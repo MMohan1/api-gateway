@@ -1,4 +1,5 @@
 from typing import List
+
 import docker
 
 
@@ -22,7 +23,11 @@ class dockerManager:
             list: List of matched containers
 
         """
-        return self.client.containers.list(filters={'label': labels}) if self.client else []
+        return (
+            self.client.containers.list(filters={"label": labels})
+            if self.client
+            else []
+        )
 
     def get_container_ip_and_port(self, container: object) -> dict:
         """This method is used to get conatiner ip and port"""
@@ -30,10 +35,10 @@ class dockerManager:
         if container_ports:
             port_key = list(container_ports.keys())[0]
             return {
-                'ip': container_ports[port_key][0].get('HostIp'),
-                'port': container_ports[port_key][0].get('HostPort')
+                "ip": container_ports[port_key][0].get("HostIp"),
+                "port": container_ports[port_key][0].get("HostPort"),
             }
 
     def is_conatiner_down(self, conatiner: object):
         """This method is used to check if conatiner is running or not."""
-        return False if conatiner.status == 'running' else True
+        return False if conatiner.status == "running" else True

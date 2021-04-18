@@ -12,7 +12,7 @@ class ConfigReader(ABC):
     def validate(self) -> NoReturn:
         """This method validate given config file exists or not."""
         if not os.path.isfile(self.config_file):
-            raise Exception(f'Sorry, config file {self.config_file} not exists')
+            raise Exception(f"Sorry, config file {self.config_file} not exists")
 
     @abstractmethod
     def read(self):
@@ -26,7 +26,7 @@ class YMLconfigReader(ConfigReader):
 
     def read(self) -> dict:
         """Method used to read the config from given config file path."""
-        with open(self.config_file, 'r') as stream:
+        with open(self.config_file, "r") as stream:
             try:
                 return yaml.safe_load(stream)
             except Exception as e:

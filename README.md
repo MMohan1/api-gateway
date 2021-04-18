@@ -71,7 +71,7 @@ TOTAL                                      340     53    84%
 ## Test With backend conatiner
 
 1. Install Docker
-2. Follow this -> https://github.com/MMohan1/python-flask-docker-hello-world
+2. Follow this -> https://github.com/MMohan1/python-flask-docker-hello-world (Conatiner labels added as config file for `api/payment` prefix)
 3. Access api `http://localhost:6000/api/payment` you should get response `Flask inside Docker`
 
 

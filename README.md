@@ -59,7 +59,7 @@ TOTAL                                      340     53    84%
 1. Clone this repo and goinside api-gateway directory (git clone https://github.com/MMohan1/api-gateway.git & cd api-gateway)
 2. Install python 3.7.
 3. Create venv -> `python3.7 -m venv ../api-gateway_venv`
-4. Activate venve `. ../api-gateway_venv/bin/active`
+4. Activate venve `. ../api-gateway_venv/bin/activate`
 5. Install packages -> `pip install -r requirements.txt`
 6. run app -> `python run.py -c /Users/mac/Projects/rgate/config.yml -p 6000` (here -c is for giving the config file path and -p for providing port number)
 7. Access the stats api using GET `http://localhost:6000/stats` 

@@ -1,6 +1,6 @@
 ## What is api-gateway
 Design an API Gateway CLI tool, rgate
-There is backend services with whom this api getway will connect. 
+There is backend services with whom this api getway will connect.
 - Each backend is a container.
 - A container is selected as a backend if the container has all the match_labels present as
 Docker labels. If there are multiple containers matching, select a random container as a
@@ -56,15 +56,15 @@ TOTAL                                      340     53    84%
 ```
 
 ## how to install
-1. Clone this repo and goinside api-gateway directory (git clone https://github.com/MMohan1/api-gateway.git & cd api-gateway)
+1. Clone this repo and goinside api-gateway directory (git clone https://github.com/MMohan1/api-gateway.git && cd api-gateway)
 2. Install python 3.7.
 3. Create venv -> `python3.7 -m venv ../api-gateway_venv`
 4. Activate venve `. ../api-gateway_venv/bin/activate`
 5. Install packages -> `pip install -r requirements.txt`
 6. run app -> `python run.py -c /Users/mac/Projects/rgate/config.yml -p 6000` (here -c is for giving the config file path and -p for providing port number)
-7. Access the stats api using GET `http://localhost:6000/stats` 
+7. Access the stats api using GET `http://localhost:6000/stats`
 8. Access other api's like `http://localhost:6000/api/payment`
-9. Run test cases `nose2 -v rgate_app.tests` 
+9. Run test cases `nose2 -v rgate_app.tests`
 10. Run test case with coverage `coverage run --source . -m unittest discover -s rgate_app/tests`
 11. Get test coverage report `coverage report -m`
 
@@ -73,5 +73,3 @@ TOTAL                                      340     53    84%
 1. Install Docker
 2. Follow this -> https://github.com/MMohan1/python-flask-docker-hello-world (Conatiner labels added as config file for `api/payment` prefix)
 3. Access api `http://localhost:6000/api/payment` you should get response `Flask inside Docker`
-
-

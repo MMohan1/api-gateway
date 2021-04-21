@@ -28,6 +28,7 @@ class requestHandlerTest(TestCase):
             ],
         }
         rgate_app.config["RGATE_CONFIG"] = self.rgate_config
+        rgate_app.BACKEND_CONTAINER_ROUNDROBIN = {}
         self.safe_request = requestsWrapper.safe_request
         mockrequest = requestsWrapper
         mockrequest.safe_request = mock.Mock(return_value=("Good", 200))
@@ -81,7 +82,7 @@ class requestHandlerTest(TestCase):
         with self.subTest("When path prefix dont match"):
             with rgate_app.test_request_context("/"):
                 response = requestHandler().check_backend_exists()
-                self.assertEqual(response, "Not Matched")
+                self.assertEqual(response, (None, "Not Matched"))
 
         with self.subTest("When path prefix match"):
             with rgate_app.test_request_context("/api/orders"):
@@ -126,3 +127,34 @@ class requestHandlerTest(TestCase):
             with rgate_app.test_request_context("/api/orders"):
                 response = requestHandler().handle_request()
                 self.assertEqual(response, ("Good", 200))
+
+    def test_get_container_round_robin(self):
+        backend_name = "test"
+        with self.subTest("When there is only one container"):
+            with rgate_app.test_request_context("/api/orders"):
+                response = requestHandler().get_container_round_robin(
+                    ["container1"], backend_name
+                )
+                self.assertEqual(response, "container1")
+
+        with self.subTest("When there is multiple containers"):
+            with rgate_app.test_request_context("/api/orders"):
+                rgate_app.BACKEND_CONTAINER_ROUNDROBIN = {}
+                conatiners = ["container1", "container2"]
+                # first time
+                response = requestHandler().get_container_round_robin(
+                    conatiners, backend_name
+                )
+                self.assertEqual(response, "container1")
+
+                # second time
+                response = requestHandler().get_container_round_robin(
+                    conatiners, backend_name
+                )
+                self.assertEqual(response, "container2")
+
+                # third time
+                response = requestHandler().get_container_round_robin(
+                    conatiners, backend_name
+                )
+                self.assertEqual(response, "container1")

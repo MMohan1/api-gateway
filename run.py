@@ -7,6 +7,8 @@ from rgate_app.api import rgate_app
 from rgate_app.configmanager import YMLconfigReader
 
 global REQUEST_STATE
+global BACKEND_CONTAINER_ROUNDROBIN
+
 
 REQUEST_STATE = {
     "request_count": {"success": 0, "error": 0},
@@ -14,7 +16,10 @@ REQUEST_STATE = {
     "requests_time": [],
 }
 
+BACKEND_CONTAINER_ROUNDROBIN = {}
+
 rgate_app.REQUEST_STATE = REQUEST_STATE
+rgate_app.BACKEND_CONTAINER_ROUNDROBIN = BACKEND_CONTAINER_ROUNDROBIN
 
 
 def run_with_builtin(port: int, debug_mode: bool, config_file: str) -> NoReturn:

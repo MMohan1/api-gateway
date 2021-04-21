@@ -25,6 +25,28 @@ class requestHandler:
     def get_one_container(self, backend_containers: list) -> object:
         return random.choice(backend_containers)
 
+    def get_container_round_robin(
+        self, backend_containers: list, backend_name: str
+    ) -> object:
+        """
+        this method is used to get container based on round robin.
+
+        Args:
+            backend_containers(list): Containers list.
+            backend_name(str): Backend name
+
+        Example:
+            rgate_app.BACKEND_CONTAINER_ROUNDROBIN = {'payment': [conatiner1, conatiner2]}
+        """
+        used_containers = rgate_app.BACKEND_CONTAINER_ROUNDROBIN.get(backend_name, [])
+        if set(used_containers) == set(backend_containers):
+            used_containers = []
+        for container in backend_containers:
+            if container not in used_containers:
+                used_containers.append(container)
+                rgate_app.BACKEND_CONTAINER_ROUNDROBIN[backend_name] = used_containers
+                return container
+
     def get_redirect_url(self, ip: str, port: str) -> str:
         """This method is used to get an url"""
         return f"http://{ip}:{port}{self.path}"
@@ -40,12 +62,13 @@ class requestHandler:
         status_code in the default_response
         - If the backend is down, respond with 503 code
         """
-        backend_containers = self.check_backend_exists()
+        backend_name, backend_containers = self.check_backend_exists()
         if backend_containers == "Not Matched":
             return self.default_response()
         elif not backend_containers:
             return self.service_unavailable_resposne()
-        container = self.get_one_container(backend_containers)
+        # container = self.get_one_container(backend_containers, backend_name)
+        container = self.get_container_round_robin(backend_containers, backend_name)
         docmang = dockerManager()
         if docmang.is_conatiner_down(container):
             return self.service_unavailable_resposne()
@@ -66,7 +89,9 @@ class requestHandler:
                 and backend.get("name") == backend_name
                 and backend.get("match_labels")
             ):
-                return dockerManager().get_containers(backend["match_labels"])
+                return backend_name, dockerManager().get_containers(
+                    backend["match_labels"]
+                )
 
     def check_backend_exists(self):
         """This method is used to check if backend exists for given path."""
@@ -77,4 +102,4 @@ class requestHandler:
                 and route.get("backend")
             ):
                 return self.check_backend_container_exists(route["backend"])
-        return "Not Matched"
+        return None, "Not Matched"
